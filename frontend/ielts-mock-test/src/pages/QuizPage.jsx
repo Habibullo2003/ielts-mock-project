@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./QuizPage.css";
 
 function QuizPage() {
+  const API_URL = 'https://ielts-mock-test.hx.com/';
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -18,7 +19,7 @@ function QuizPage() {
 
   // Savollarni yuklash
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/questions/")
+    fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
         const validData = Array.isArray(data) ? data : [];
@@ -41,7 +42,7 @@ function QuizPage() {
 
   // Yuborish
   const handleSubmit = useCallback(() => {
-    fetch("http://127.0.0.1:8000/api/submit/", {
+    fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ answers }),
