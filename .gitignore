@@ -9,6 +9,7 @@ __pycache__/
 
 # Environment / virtualenv
 venv/
+.env/
 
 # Django migrations (optional)
 */migrations/*.pyc
