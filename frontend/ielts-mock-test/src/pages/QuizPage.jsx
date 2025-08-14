@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./QuizPage.css";
 
 function QuizPage() {
-  const API_URL = 'https://ielts-mock-test.hx.com/';
+  const API_URL = 'https://ielts-mock-project-1.onrender.com/api/questions/';
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -42,7 +42,7 @@ function QuizPage() {
 
   // Yuborish
   const handleSubmit = useCallback(() => {
-    fetch(API_URL, {
+    fetch("https://ielts-mock-project-1.onrender.com/api/submit/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ answers }),
