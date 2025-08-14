@@ -10,26 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
-from pathlib import Path
-from dotenv import load_dotenv
+# settings.py
 
-# .env faylni yuklash
-load_dotenv()
+import os, dj_database_url
+import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR aniqlash
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# environ konfiguratsiyasi
+env = environ.Env(
+    DEBUG=(bool, False),
+    DB_LIVE=(bool, False)
+)
+
+# .env faylini o‘qish
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Django sozlamalari
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG') == 'True'
+ALLOWED_HOSTS = ['*']  # Ishlab chiqish uchun, keyin domen nomini yozing
 
-ALLOWED_HOSTS = ['*']
 
 
 
@@ -65,8 +70,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'config.urls'
@@ -88,22 +91,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-
+# Database konfiguratsiyasi
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-    }
+    'default': dj_database_url.parse(env('DATABASE_URL'))
 }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -149,6 +140,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
